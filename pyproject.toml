@@ -1,6 +1,6 @@
 [project]
 name = "ncrtxt"
-version = "2025.11.26.202922"
+version = "2025.11.26.220142"
 description = "转换数字字符引用文件 - 将HTML数字字符引用转换为对应的Unicode字符"
 readme = "README.md"
 requires-python = ">=3.8"
