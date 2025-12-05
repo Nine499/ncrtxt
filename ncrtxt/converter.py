@@ -8,7 +8,7 @@ from typing import Union
 def convert_html_entities(text: str) -> str:
     """转换HTML数字字符引用为对应字符
 
-    支持十进制（&#1234;）和十六进制（&#x1F600;）格式的数字字符引用
+    支持十进制（&#1234;）和十六进制（&#x1F600; 或 &#X1F600;）格式的数字字符引用
 
     Args:
         text: 包含数字字符引用的文本
@@ -25,8 +25,8 @@ def convert_html_entities(text: str) -> str:
     # 匹配十进制数字字符引用 &#1234;
     decimal_pattern = re.compile(r"&#(\d+);")
 
-    # 匹配十六进制数字字符引用 &#x1F600;
-    hex_pattern = re.compile(r"&#x([0-9a-fA-F]+);")
+    # 匹配十六进制数字字符引用 &#x1F600; 或 &#X1F600;
+    hex_pattern = re.compile(r"&#[xX]([0-9a-fA-F]+);")
 
     def replace_decimal(match):
         code_point = int(match.group(1))
