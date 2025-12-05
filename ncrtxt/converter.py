@@ -49,14 +49,41 @@ def convert_html_entities(text: str) -> str:
     return text
 
 
-def convert_file(input_file: Union[str, Path], output_file: Union[str, Path]) -> None:
-    """转换文件中的数字字符引用
+def _find_incomplete_entity(text: str, max_len: int = 12) -> int:
+    """查找文本末尾可能不完整的数字字符引用
 
-    读取输入文件，转换其中的数字字符引用，并写入输出文件
+    Args:
+        text: 要检查的文本
+        max_len: 实体最大长度（&#1114111; 或 &#x10FFFF; 约10字符）
+
+    Returns:
+        不完整实体的起始位置，未找到返回 -1
+    """
+    # 只检查末尾 max_len 个字符
+    search_start = max(0, len(text) - max_len)
+    pos = text.rfind("&#", search_start)
+    if pos == -1:
+        return -1
+    # 如果后面有分号，说明实体是完整的
+    if ";" in text[pos:]:
+        return -1
+    return pos
+
+
+def convert_file(
+    input_file: Union[str, Path],
+    output_file: Union[str, Path],
+    chunk_size: int = 1024 * 1024,
+) -> None:
+    """转换文件中的数字字符引用（流式处理，支持大文件）
+
+    读取输入文件，转换其中的数字字符引用，并写入输出文件。
+    使用流式处理，内存占用与文件大小无关。
 
     Args:
         input_file: 输入文件路径
         output_file: 输出文件路径
+        chunk_size: 每次读取的块大小（字符数），默认 1MB
 
     Raises:
         FileNotFoundError: 输入文件不存在
@@ -73,15 +100,35 @@ def convert_file(input_file: Union[str, Path], output_file: Union[str, Path]) ->
         raise FileNotFoundError(f"输入文件不存在: {input_path}")
 
     try:
-        # 读取输入文件
-        content = input_path.read_text(encoding="utf-8")
-
-        # 转换内容
-        converted_content = convert_html_entities(content)
-
-        # 写入输出文件
         output_path.parent.mkdir(parents=True, exist_ok=True)
-        output_path.write_text(converted_content, encoding="utf-8")
+
+        with (
+            open(input_path, "r", encoding="utf-8") as infile,
+            open(output_path, "w", encoding="utf-8") as outfile,
+        ):
+            buffer = ""
+
+            while True:
+                chunk = infile.read(chunk_size)
+                if not chunk:
+                    # 处理剩余缓冲区
+                    if buffer:
+                        outfile.write(convert_html_entities(buffer))
+                    break
+
+                # 合并缓冲区和新块
+                data = buffer + chunk
+                buffer = ""
+
+                # 检查末尾是否有不完整的实体
+                incomplete_pos = _find_incomplete_entity(data)
+                if incomplete_pos != -1:
+                    buffer = data[incomplete_pos:]
+                    data = data[:incomplete_pos]
+
+                # 处理并写入完整部分
+                if data:
+                    outfile.write(convert_html_entities(data))
 
     except UnicodeDecodeError as e:
         raise UnicodeDecodeError(
