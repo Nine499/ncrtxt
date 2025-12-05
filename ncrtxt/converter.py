@@ -62,8 +62,13 @@ def _find_incomplete_entity(text: str, max_len: int = 12) -> int:
     # 只检查末尾 max_len 个字符
     search_start = max(0, len(text) - max_len)
     pos = text.rfind("&#", search_start)
+
+    # 如果没找到 "&#"，检查是否以 "&" 结尾（可能是 &# 被分割）
     if pos == -1:
+        if text.endswith("&"):
+            return len(text) - 1
         return -1
+
     # 如果后面有分号，说明实体是完整的
     if ";" in text[pos:]:
         return -1
