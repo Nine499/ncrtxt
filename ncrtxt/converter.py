@@ -4,6 +4,10 @@ import re
 from pathlib import Path
 from typing import Union
 
+# 预编译正则表达式，避免每次调用时重复编译
+_DECIMAL_PATTERN = re.compile(r"&#(\d+);")
+_HEX_PATTERN = re.compile(r"&#[xX]([0-9a-fA-F]+);")
+
 
 def convert_html_entities(text: str) -> str:
     """转换HTML数字字符引用为对应字符
@@ -22,11 +26,6 @@ def convert_html_entities(text: str) -> str:
         >>> convert_html_entities('&#x4E2D;')
         '中'
     """
-    # 匹配十进制数字字符引用 &#1234;
-    decimal_pattern = re.compile(r"&#(\d+);")
-
-    # 匹配十六进制数字字符引用 &#x1F600; 或 &#X1F600;
-    hex_pattern = re.compile(r"&#[xX]([0-9a-fA-F]+);")
 
     def replace_decimal(match):
         code_point = int(match.group(1))
@@ -43,9 +42,9 @@ def convert_html_entities(text: str) -> str:
             return match.group(0)
 
     # 先处理十六进制引用
-    text = hex_pattern.sub(replace_hex, text)
+    text = _HEX_PATTERN.sub(replace_hex, text)
     # 再处理十进制引用
-    text = decimal_pattern.sub(replace_decimal, text)
+    text = _DECIMAL_PATTERN.sub(replace_decimal, text)
 
     return text
 
