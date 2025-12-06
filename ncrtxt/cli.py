@@ -1,4 +1,4 @@
-"""命令行接口"""
+"""命令行接口 - UV 优化版本"""
 
 import argparse
 import sys
@@ -19,6 +19,10 @@ def main():
   ncrtxt 原始文件.txt 转换后文件.txt
   ncrtxt input.txt output.txt
   ncrtxt document.html converted.txt
+  
+  # 使用 UV 运行
+  uv run ncrtxt input.txt output.txt
+  uv run --no-project ncrtxt input.txt output.txt
 
 支持的格式:
   - 十进制: &#18487; → 䠷

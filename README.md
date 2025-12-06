@@ -3,8 +3,9 @@
 [![Python Version](https://img.shields.io/badge/python-3.8+-blue.svg)](https://python.org)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![PyPI Version](https://img.shields.io/pypi/v/ncrtxt.svg)](https://pypi.org/project/ncrtxt/)
+[![UV](https://img.shields.io/badge/UV-compatible-blue.svg)](https://github.com/astral-sh/uv)
 
-**ncrtxt** 是一个强大的 Python 命令行工具，专门用于将 HTML 数字字符引用转换为对应的 Unicode 字符。它支持十进制和十六进制格式的数字字符引用，是处理网页内容、文本数据清理和国际化的理想工具。
+**ncrtxt** 是一个强大的 Python 命令行工具，专门用于将 HTML 数字字符引用转换为对应的 Unicode 字符。它支持十进制和十六进制格式的数字字符引用，是处理网页内容、文本数据清理和国际化的理想工具。本项目已完全适配 **UV** 包管理器。
 
 ## ✨ 特性
 
@@ -15,23 +16,34 @@
 - 🌍 **Unicode 完整支持**：支持所有 Unicode 字符范围
 - 📖 **详细错误提示**：提供清晰的错误信息和解决建议
 - 🔧 **零依赖**：仅使用 Python 标准库，无需额外安装依赖
+- ⚡ **UV 优化**：完全支持 UV 包管理器，提供更快的依赖解析和安装
 
 ## 🚀 快速开始
 
 ### 安装
 
-#### 使用 pip 安装（推荐）
+#### 使用 UV 安装（推荐）
+
+```bash
+# 安装 ncrtxt
+uv add ncrtxt
+
+# 或者全局安装
+uv tool install ncrtxt
+```
+
+#### 使用 pip 安装
 
 ```bash
 pip install ncrtxt
 ```
 
-#### 从源码安装
+#### 从源码安装（使用 UV）
 
 ```bash
 git clone https://github.com/Nine499/ncrtxt.git
 cd ncrtxt
-pip install -e .
+uv sync
 ```
 
 ### 基本使用
@@ -45,6 +57,9 @@ ncrtxt --help
 
 # 查看版本
 ncrtxt --version
+
+# 使用 UV 运行
+uv run ncrtxt input.txt output.txt
 ```
 
 ## 📖 详细使用说明
@@ -152,6 +167,19 @@ output_path = Path("data/output.txt")
 convert_file(input_path, output_path)
 ```
 
+### 使用 UV 运行脚本
+
+```bash
+# 直接运行脚本
+uv run python your_script.py
+
+# 使用项目中的工具
+uv run ncrtxt input.txt output.txt
+
+# 在虚拟环境中运行
+uv run --no-project python your_script.py
+```
+
 ### 错误处理
 
 ```python
@@ -168,7 +196,22 @@ except OSError as e:
 
 ## 🛠️ 开发指南
 
-### 环境设置
+### 环境设置（使用 UV）
+
+```bash
+# 克隆仓库
+git clone https://github.com/Nine499/ncrtxt.git
+cd ncrtxt
+
+# 同步依赖（UV 会自动创建虚拟环境）
+uv sync
+
+# 激活虚拟环境（可选）
+source .venv/bin/activate  # Linux/Mac
+# 或 .venv\Scripts\activate  # Windows
+```
+
+### 环境设置（传统方式）
 
 ```bash
 # 克隆仓库
@@ -200,7 +243,32 @@ ncrtxt/
 └── .gitignore          # Git 忽略文件
 ```
 
-### 运行测试
+### 运行测试（使用 UV）
+
+```bash
+# 运行所有测试
+uv run test
+
+# 或者直接使用 pytest
+uv run pytest
+
+# 运行特定测试
+uv run pytest tests/test_converter.py
+
+# 生成覆盖率报告
+uv run pytest --cov=ncrtxt
+
+# 代码检查
+uv run lint
+
+# 代码格式化
+uv run format
+
+# 类型检查
+uv run type-check
+```
+
+### 运行测试（传统方式）
 
 ```bash
 # 运行所有测试
@@ -213,7 +281,23 @@ python -m pytest tests/test_converter.py
 python -m pytest --cov=ncrtxt
 ```
 
-### 构建和发布
+### 构建和发布（使用 UV）
+
+```bash
+# 构建包
+uv build
+
+# 检查包
+uv twine check dist/*
+
+# 发布到测试 PyPI
+uv publish --publish-url https://test.pypi.org/legacy/
+
+# 发布到 PyPI（需要配置认证）
+uv publish
+```
+
+### 构建和发布（传统方式）
 
 ```bash
 # 构建包

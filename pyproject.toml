@@ -1,6 +1,6 @@
 [project]
 name = "ncrtxt"
-version = "2025.11.26.220142"
+version = "2025.12.06.083032"
 description = "转换数字字符引用文件 - 将HTML数字字符引用转换为对应的Unicode字符"
 readme = "README.md"
 requires-python = ">=3.8"
@@ -15,7 +15,12 @@ build-backend = "hatchling.build"
 [tool.hatch.build.targets.wheel]
 packages = ["ncrtxt"]
 
+# UV 专用配置 - 统一的依赖组
 [dependency-groups]
 dev = [
-    "hatchling>=1.27.0"
+    "hatchling>=1.27.0",
+    "pytest>=8.0.0",
+    "pytest-cov>=4.0.0",
+    "ruff>=0.1.0",
+    "mypy>=1.0.0"
 ]
