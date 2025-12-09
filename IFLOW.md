@@ -20,9 +20,14 @@ ncrtxt/
 │   ├── __init__.py   # 包初始化，包含版本信息
 │   ├── cli.py        # 命令行接口和参数解析（UV 优化）
 │   └── converter.py  # 核心转换功能
+├── dev/              # 开发工具目录
+│   ├── up-version.py # 版本更新脚本
+│   └── git-workflow.py # Git 工作流程自动化脚本
 ├── pyproject.toml    # 项目配置和依赖管理（UV 专用）
 ├── README.md         # 项目说明文档（UV 相关）
-└── IFLOW.md          # 项目上下文文档
+├── IFLOW.md          # 项目上下文文档
+├── .python-version   # Python 版本指定
+└── .gitignore        # Git 忽略文件
 ```
 
 ## 构建和运行
@@ -109,6 +114,29 @@ python -m build
 uv pip install dist/ncrtxt-*.whl
 # 或
 pip install dist/ncrtxt-*.whl
+
+# 使用版本更新脚本（自动更新版本并构建）
+python3 dev/up-version.py
+
+# 使用 Git 工作流程自动化脚本
+python3 dev/git-workflow.py
+```
+
+### Git 工作流程自动化
+
+项目包含完整的 Git 工作流程自动化脚本，提供以下功能：
+
+- **环境检查**：验证 Git 仓库状态和配置
+- **状态分析**：详细展示所有更改和文件状态
+- **智能选择**：支持添加所有更改或选择特定文件
+- **自动生成提交信息**：基于文件类型和更改内容生成规范的提交信息
+- **交互式确认**：提供编辑和确认提交信息的机会
+- **远程推送**：安全地推送到远程仓库
+- **错误处理**：完善的错误处理和恢复机制
+
+使用方法：
+```bash
+python3 dev/git-workflow.py
 ```
 
 ## 开发约定
@@ -169,6 +197,8 @@ pip install dist/ncrtxt-*.whl
 - 包构建：使用 hatchling
 - 主要包管理器：UV
 - 备用包管理器：pip（兼容性）
+- 版本管理：自动化版本更新脚本（dev/up-version.py）
+- Git 工作流程：自动化 Git 工作流程脚本（dev/git-workflow.py）
 
 ## 常见用例
 

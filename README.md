@@ -3,6 +3,7 @@
 [![Python Version](https://img.shields.io/badge/python-3.8+-blue.svg)](https://python.org)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![PyPI Version](https://img.shields.io/pypi/v/ncrtxt.svg)](https://pypi.org/project/ncrtxt/)
+[![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)](https://github.com/Nine499/ncrtxt)
 [![UV](https://img.shields.io/badge/UV-compatible-blue.svg)](https://github.com/astral-sh/uv)
 
 **ncrtxt** 是一个强大的 Python 命令行工具，专门用于将 HTML 数字字符引用转换为对应的 Unicode 字符。它支持十进制和十六进制格式的数字字符引用，是处理网页内容、文本数据清理和国际化的理想工具。本项目已完全适配 **UV** 包管理器。
@@ -178,6 +179,9 @@ uv run ncrtxt input.txt output.txt
 
 # 在虚拟环境中运行
 uv run --no-project python your_script.py
+
+# 使用 Git 工作流程自动化脚本
+uv run python dev/git-workflow.py
 ```
 
 ### 错误处理
@@ -193,6 +197,47 @@ except UnicodeDecodeError:
 except OSError as e:
     print(f"文件操作错误: {e}")
 ```
+
+## 🔄 Git 工作流程自动化
+
+项目包含一个完整的 Git 工作流程自动化脚本 (`dev/git-workflow.py`)，可以处理从状态检查到远程推送的完整流程。
+
+### 主要功能
+
+1. **环境检查**：验证 Git 仓库状态、用户配置和远程仓库
+2. **状态分析**：详细展示所有更改和文件状态
+3. **智能选择**：支持添加所有更改或选择特定文件
+4. **自动生成提交信息**：基于文件类型和更改内容生成规范的提交信息
+5. **交互式确认**：提供编辑和确认提交信息的机会
+6. **远程推送**：安全地推送到远程仓库
+
+### 使用方法
+
+```bash
+# 运行完整的 Git 工作流程
+python3 dev/git-workflow.py
+
+# 或使用 UV 运行
+uv run python dev/git-workflow.py
+```
+
+### 工作流程步骤
+
+1. **环境检查**：验证 Git 配置和更新本地仓库
+2. **状态分析**：展示所有待处理的更改
+3. **选择更改**：选择要添加到暂存区的文件
+4. **生成提交信息**：自动生成符合规范的提交信息
+5. **确认提交**：预览和确认提交信息
+6. **远程推送**：选择性地推送到远程仓库
+
+### 错误处理
+
+脚本包含完善的错误处理机制：
+
+- 自动检测和解决常见 Git 问题
+- 提供详细的错误信息和解决方案
+- 支持用户中断和恢复操作
+- 处理权限和网络问题
 
 ## 🛠️ 开发指南
 
@@ -235,11 +280,16 @@ ncrtxt/
 │   ├── __init__.py      # 包初始化文件
 │   ├── cli.py           # 命令行接口
 │   └── converter.py     # 核心转换功能
+├── dev/                 # 开发工具
+│   ├── up-version.py    # 版本更新脚本
+│   └── git-workflow.py  # Git 工作流程自动化脚本
 ├── tests/               # 测试文件（如果存在）
 ├── docs/                # 文档（如果存在）
 ├── pyproject.toml       # 项目配置
 ├── README.md           # 项目说明
+├── IFLOW.md            # 项目上下文文档
 ├── LICENSE             # 许可证
+├── .python-version     # Python 版本指定
 └── .gitignore          # Git 忽略文件
 ```
 
@@ -295,6 +345,12 @@ uv publish --publish-url https://test.pypi.org/legacy/
 
 # 发布到 PyPI（需要配置认证）
 uv publish
+
+# 使用版本更新脚本
+python3 dev/up-version.py
+
+# 使用 Git 工作流程自动化脚本
+python3 dev/git-workflow.py
 ```
 
 ### 构建和发布（传统方式）
