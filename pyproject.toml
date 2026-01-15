@@ -1,0 +1,20 @@
+[project]
+name = "ncrtxt49"
+version = "2026.01.15.121313"
+description = "将 HTML 数字字符引用转换为对应的 Unicode 字符"
+readme = "README.md"
+authors = [
+    { name = "Nine499", email = "14026156+Nine499@users.noreply.github.com" }
+]
+requires-python = ">=3.12"
+dependencies = []
+
+[project.scripts]
+ncrtxt49 = "ncrtxt49.cli:main"
+
+[build-system]
+requires = ["uv_build>=0.9.24,<0.10.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = []
